@@ -18,13 +18,22 @@ const routes: Routes = [
   {
     path: 'recuperar',
     loadChildren: () => import('./pages/recuperar/recuperar.module').then( m => m.RecuperarPageModule)
-  },  {
+  },
+  {
     path: 'horario',
     loadChildren: () => import('./pages/horario/horario.module').then( m => m.HorarioPageModule)
   },
   {
     path: 'escanear',
     loadChildren: () => import('./pages/escanear/escanear.module').then( m => m.EscanearPageModule)
+  },
+  {
+    path: 'asignaturaprofesor',
+    loadChildren: () => import('./pages/asignaturaprofesor/asignaturaprofesor.module').then( m => m.AsignaturaprofesorPageModule)
+  },
+  {
+    path: 'profesor',
+    loadChildren: () => import('./pages/profesor/profesor.module').then( m => m.ProfesorPageModule)
   },
 
 ];
