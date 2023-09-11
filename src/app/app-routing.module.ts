@@ -39,7 +39,10 @@ const routes: Routes = [
     path: 'qr',
     loadChildren: () => import('./pages/qr/qr.module').then( m => m.QRPageModule)
   },
-
+  {
+    path: 'registro', // Nueva ruta para la pestaña de registro
+    loadChildren: () => import('./pages/registro/registro.module').then( m => m.RegistroPageModule)
+  },
 
 ];
 
