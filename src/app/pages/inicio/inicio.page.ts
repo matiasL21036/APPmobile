@@ -7,13 +7,12 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./inicio.page.scss'],
 })
 export class InicioPage {
-  username: string = ''; // Define la propiedad username en el componente InicioPage
+  username: string;
 
   constructor(private route: ActivatedRoute) {
-    // Recupera el nombre de usuario del parámetro pasado desde la página HomePage
+    // Obtiene el nombre de usuario desde la ruta
     const usernameParam = this.route.snapshot.paramMap.get('username');
-    if (usernameParam !== null) {
-      this.username = usernameParam;
-    }
+    this.username = usernameParam !== null ? usernameParam : 'Invitado'; // Asigna un valor predeterminado en caso de que sea null
   }
 }
+
