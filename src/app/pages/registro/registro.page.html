@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Registro
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-img src="assets/logo-fondonegro.png" alt="Imagen de encabezado"></ion-img>
+
+<ion-content class="ion-padding-top p-3">
+  <form>
+    <!-- Campo de Nombre de Usuario -->
+    <div class="form-group">
+      <label for="nombreUsuario">Nombre de Usuario</label>
+      <input type="text" id="nombreUsuario" class="form-control" placeholder="Nombre de Usuario" required>
+    </div>
+
+
+    <!-- Campo de Correo -->
+    <div class=" form-group">
+      <label for="correo">Correo</label>
+      <input type="email" id="correo" class="form-control" placeholder="Correo" required>
+    </div>
+
+    <!-- Campo de Contraseña -->
+    <div class="form-group">
+      <label for="contrasena">Contraseña</label>
+      <input type="password" id="contrasena" class="form-control" placeholder="Contraseña" required>
+    </div>
+
+    <!-- Campo de Confirmar Contraseña -->
+    <div class="form-group">
+      <label for="confirmarContrasena">Confirmar Contraseña</label>
+      <input type="password" id="confirmarContrasena" class="form-control" placeholder="Confirmar Contraseña" required>
+    </div>
+
+    <!-- Botón de Registro -->
+    <ion-button>Registrarse</ion-button>
+  </form>
+
+  <!-- Enlace para Iniciar Sesión -->
+  <p class="mt-3">¿Ya tienes cuenta? <a href="home">Inicia Sesión</a></p>
+</ion-content>
