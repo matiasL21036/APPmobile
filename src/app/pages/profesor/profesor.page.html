@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="text-center">Bienvenido Alejandro!</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="container text-center">
+    <!-- Imagen del profesor -->
+    <img src="assets/alejandro.jpg" alt="Alejandro" class="img-fluid rounded-circle profesor-img">
+    <p><small style="font-size: 12px;">ALEJANDRO SEBASTIAN SEPULVEDA MONTERO</small></p>
+
+  </div>
+
+  <!-- Lista de asignaturas -->
+  <ul class="list-group mt-4">
+    <li class="list-group-item" *ngFor="let asignatura of asignaturas" routerLink="/asignaturaprofesor">
+      {{ asignatura.nombre }} - {{ asignatura.horaInicio }} a {{ asignatura.horaTermino }}
+    </li>
+  </ul>
+</ion-content>
