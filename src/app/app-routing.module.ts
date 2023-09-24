@@ -16,6 +16,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/inicio/inicio.module').then(m => m.InicioPageModule)
   },
   {
+    path: 'registro',
+    loadChildren: () => import('./pages/registro/registro.module').then( m => m.RegistroPageModule)
+  },
+  {
     path: 'recuperar',
     loadChildren: () => import('./pages/recuperar/recuperar.module').then( m => m.RecuperarPageModule)
   },
@@ -51,6 +55,15 @@ const routes: Routes = [
     path: 'horarioprofesor',
     loadChildren: () => import('./pages/horarioprofesor/horarioprofesor.module').then( m => m.HorarioprofesorPageModule)
   },
+  {
+    path: 'detalleprofesor',
+    loadChildren: () => import('./pages/detalleprofesor/detalleprofesor.module').then( m => m.DetalleprofesorPageModule)
+  },
+  {
+    path: 'detalleprofesor',
+    loadChildren: () => import('./pages/detalleprofesor/detalleprofesor.module').then( m => m.DetalleprofesorPageModule)
+  },
+
 
 ];
 
