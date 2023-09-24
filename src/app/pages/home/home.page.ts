@@ -14,7 +14,7 @@ export class HomePage {
   constructor(private router: Router, private alertController: AlertController) {} // Inyecta AlertController
 
   async login() { // Usa async para mostrar la alerta correctamente
-    if (this.username === 'admin' && this.password === '123') {
+    if (this.username === 'alumno' && this.password === '123') {
       // Usuario y contraseña de alumno válidos, redirige a la página de inicio de alumno
       this.router.navigate(['/inicio', 'alumno']);
     } else if (this.username === 'profesor' && this.password === '123') {

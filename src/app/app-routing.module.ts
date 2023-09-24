@@ -59,11 +59,7 @@ const routes: Routes = [
     path: 'detalleprofesor',
     loadChildren: () => import('./pages/detalleprofesor/detalleprofesor.module').then( m => m.DetalleprofesorPageModule)
   },
-  {
-    path: 'detalleprofesor',
-    loadChildren: () => import('./pages/detalleprofesor/detalleprofesor.module').then( m => m.DetalleprofesorPageModule)
-  },
-
+ 
 
 ];
 
