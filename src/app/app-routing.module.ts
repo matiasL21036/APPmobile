@@ -34,11 +34,22 @@ const routes: Routes = [
   {
     path: 'profesor',
     loadChildren: () => import('./pages/profesor/profesor.module').then( m => m.ProfesorPageModule)
-  },  {
+  },
+  {
     path: 'qr',
     loadChildren: () => import('./pages/qr/qr.module').then( m => m.QRPageModule)
   },
-
+  {
+    path: 'asistencia',
+    loadChildren: () => import('./pages/asistencia/asistencia.module').then( m => m.AsistenciaPageModule)
+  },
+  {
+    path: 'asistenciaprofe',
+    loadChildren: () => import('./pages/asistenciaprofe/asistenciaprofe.module').then( m => m.AsistenciaprofePageModule)
+  },  {
+    path: 'horarioprofesor',
+    loadChildren: () => import('./pages/horarioprofesor/horarioprofesor.module').then( m => m.HorarioprofesorPageModule)
+  },
 
 ];
 
