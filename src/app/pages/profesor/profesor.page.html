@@ -12,10 +12,20 @@
 
   </div>
 
-  <!-- Lista de asignaturas -->
-  <ul class="list-group mt-4">
-    <li class="list-group-item" *ngFor="let asignatura of asignaturas" routerLink="/asignaturaprofesor">
-      {{ asignatura.nombre }} - {{ asignatura.horaInicio }} a {{ asignatura.horaTermino }}
-    </li>
-  </ul>
+  <ion-tabs>
+    <ion-tab-bar slot="bottom">
+      <ion-tab-button routerLink="/profesor">
+        <ion-icon name="home"></ion-icon>
+        <ion-label>Inicio</ion-label>
+      </ion-tab-button>
+      <ion-tab-button routerLink="/horarioprofesor">
+        <ion-icon name="time-outline"></ion-icon>
+        <ion-label>Horario</ion-label>
+      </ion-tab-button>
+      <ion-tab-button routerLink="/asistenciaprofe">
+        <ion-icon name="hand-right-outline"></ion-icon>
+        <ion-label>Asistencia</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
 </ion-content>
