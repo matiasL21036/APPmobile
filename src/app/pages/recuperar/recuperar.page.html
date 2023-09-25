@@ -10,10 +10,19 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-item>
-    <ion-label position="floating">Correo</ion-label>
-    <ion-input type="text"></ion-input>
-  </ion-item>
+  <!-- Utiliza el formulario y las validaciones -->
+  <form *ngIf="recuperarForm" [formGroup]="recuperarForm">
+    <ion-item [class.invalid]="recuperarForm.get('correo')?.invalid && recuperarForm.get('correo')?.dirty">
+      <ion-label position="floating">Correo</ion-label>
+      <ion-input type="email" formControlName="correo"></ion-input>
+    </ion-item>
+    <!-- Muestra un mensaje de error si el campo es inválido y ha sido tocado -->
+    <ion-text color="danger" *ngIf="recuperarForm.get('correo')?.invalid && recuperarForm.get('correo')?.dirty">
+      <p *ngIf="recuperarForm.get('correo')?.hasError('required')">El correo es requerido.</p>
+      <p *ngIf="recuperarForm.get('correo')?.hasError('email')">Por favor, ingrese un correo electrónico válido.</p>
+    </ion-text>
 
-  <ion-button expand="full">Enviar</ion-button>
+    <ion-button expand="full" (click)="enviarCorreo()" [disabled]="recuperarForm.invalid">Enviar</ion-button>
+    <!-- Deshabilita el botón si el formulario es inválido -->
+  </form>
 </ion-content>
