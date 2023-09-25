@@ -10,33 +10,33 @@
 <ion-content class="ion-padding ion-text-center">
   <ion-img src="assets/logo-fondonegro.png" alt="Imagen de encabezado"></ion-img>
 
-  <form class="ion-padding">
+  <form class="ion-padding" (submit)="registrarUsuario()">
     <!-- Campo de Nombre de Usuario -->
     <ion-item>
       <ion-label position="floating">Nombre de Usuario</ion-label>
-      <ion-input type="text" id="nombreUsuario" required></ion-input>
+      <ion-input type="text" [(ngModel)]="nombreUsuario" name="nombreUsuario" required></ion-input>
     </ion-item>
 
     <!-- Campo de Correo -->
     <ion-item>
       <ion-label position="floating">Correo</ion-label>
-      <ion-input type="email" id="correo" required></ion-input>
+      <ion-input type="email" [(ngModel)]="correo" name="correo" required></ion-input>
     </ion-item>
 
     <!-- Campo de Contraseña -->
     <ion-item>
       <ion-label position="floating">Contraseña</ion-label>
-      <ion-input type="password" id="contrasena" required></ion-input>
+      <ion-input type="password" [(ngModel)]="contrasena" name="contrasena" required></ion-input>
     </ion-item>
 
     <!-- Campo de Confirmar Contraseña -->
     <ion-item>
       <ion-label position="floating">Confirmar Contraseña</ion-label>
-      <ion-input type="password" id="confirmarContrasena" required></ion-input>
+      <ion-input type="password" [(ngModel)]="confirmarContrasena" name="confirmarContrasena" required></ion-input>
     </ion-item>
 
     <!-- Botón de Registro -->
-    <ion-button expand="full">Registrarse</ion-button>
+    <ion-button type="submit" expand="full">Registrarse</ion-button>
   </form>
 
   <!-- Enlace para Iniciar Sesión -->
