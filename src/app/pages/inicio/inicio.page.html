@@ -3,6 +3,12 @@
     <ion-title>
       Inicio
     </ion-title>
+    <!-- Agrega un botón en la esquina superior derecha para cerrar sesión -->
+    <ion-buttons slot="end">
+      <ion-button routerLink="/home" color="dark">
+        <ion-icon name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -12,6 +18,11 @@
     <ion-card-title>
       ¡Bienvenido, {{ username }}!
     </ion-card-title>
+    <div class="container text-center">
+      <!-- Imagen del profesor (ajusta el ancho y alto según tus necesidades) -->
+      <img src="assets/ibrayan.jpeg" alt="ibrayan" class="img-fluid rounded-circle profesor-img"
+        style="width: 150px; height: 150px;">
+    </div>
   </ion-card-header>
 
   <ion-tabs>
