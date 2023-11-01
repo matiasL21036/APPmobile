@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { User } from 'src/app/models/user.model';
+import { FirebaseService } from 'src/app/services/firebase.service';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-auth',
@@ -10,20 +14,47 @@ export class AuthPage implements OnInit {
 
 
   form = new FormGroup({
-    email: new FormControl('',[Validators.required,Validators.email]),
-    password: new FormControl('',[Validators.required])
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required])
   })
 
-  constructor() { }
-
+  firebaseSvc = inject(FirebaseService);
+  utlisSvc = inject(UtilsService);
   ngOnInit() {
   }
 
 
-  submit() {
-    console.log('Form submitted:', this.form.value);
+  async submit() {
+    //console.log('Form submitted:', this.form.value);
+    if (this.form.valid) {
+
+      const loading = await this.utlisSvc.loading();
+      await loading.present();
+
+
+
+      this.firebaseSvc.signIn(this.form.value as User).then(res => {
+        console.log(res)
+      }).catch(error => {
+        console.log(error);
+        this.utlisSvc.presentToast({
+          message: error.message,
+          duration: 2500,
+          color: 'primary',
+          position:'middle',
+          icon: 'alert-circle-outline'
+        })
+
+
+
+
+
+      }).finally(() => {
+        loading.dismiss();
+      })
+    }
   }
-  
+
 
 
 }

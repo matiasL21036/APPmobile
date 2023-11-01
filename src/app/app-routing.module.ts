@@ -12,14 +12,7 @@ const routes: Routes = [
     path: 'inicio/:username', // Ruta que incluye el parámetro 'username'
     loadChildren: () => import('./pages/inicio/inicio.module').then(m => m.InicioPageModule)
   },
-  {
-    path: 'registro',
-    loadChildren: () => import('./pages/registro/registro.module').then( m => m.RegistroPageModule)
-  },
-  {
-    path: 'recuperar',
-    loadChildren: () => import('./pages/recuperar/recuperar.module').then( m => m.RecuperarPageModule)
-  },
+ 
   {
     path: 'horario',
     loadChildren: () => import('./pages/horario/horario.module').then( m => m.HorarioPageModule)
