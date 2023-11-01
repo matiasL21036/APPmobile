@@ -9,7 +9,7 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'inicio/:username', // Ruta que incluye el parámetro 'username'
+    path: 'inicio', // Ruta que incluye el parámetro 'username'
     loadChildren: () => import('./pages/inicio/inicio.module').then(m => m.InicioPageModule)
   },
  
