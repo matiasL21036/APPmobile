@@ -1,9 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
 import { User } from 'src/app/models/user.model';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -11,50 +11,50 @@ import { UtilsService } from 'src/app/services/utils.service';
   styleUrls: ['./auth.page.scss'],
 })
 export class AuthPage implements OnInit {
-
-
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required])
-  })
+    password: new FormControl('', [Validators.required]),
+  });
 
-  firebaseSvc = inject(FirebaseService);
-  utlisSvc = inject(UtilsService);
-  ngOnInit() {
-  }
-
+  constructor(
+    private firebaseSvc: FirebaseService,
+    private utilsSvc: UtilsService,
+    private router: Router
+  ) {}
 
   async submit() {
-    //console.log('Form submitted:', this.form.value);
     if (this.form.valid) {
-
-      const loading = await this.utlisSvc.loading();
+      const loading = await this.utilsSvc.loading();
       await loading.present();
 
-
-
-      this.firebaseSvc.signIn(this.form.value as User).then(res => {
-        console.log(res)
+      this.firebaseSvc.signIn(this.form.value as User).then(authResult => {
+        // Obtén el tipo de usuario desde Firebase
+        this.firebaseSvc.getUserTipoUsuario(authResult.user.uid).subscribe(tipoUsuario => {
+          if (tipoUsuario === 'alumno') {
+            this.router.navigate(['/inicio', { username: authResult.user.email }]);
+          } else if (tipoUsuario === 'profesor') {
+            this.router.navigate(['/profesor', { username: authResult.user.email }]);
+          } else {
+            // Tipo de usuario desconocido
+            console.log('Tipo de usuario desconocido');
+          }
+        });
       }).catch(error => {
         console.log(error);
-        this.utlisSvc.presentToast({
+        this.utilsSvc.presentToast({
           message: error.message,
           duration: 2500,
           color: 'primary',
-          position:'middle',
+          position: 'middle',
           icon: 'alert-circle-outline'
-        })
-
-
-
-
-
+        });
       }).finally(() => {
         loading.dismiss();
-      })
+      });
     }
   }
 
-
-
+  ngOnInit() {
+    // Lógica de inicialización si es necesaria
+  }
 }
