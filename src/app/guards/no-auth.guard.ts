@@ -26,10 +26,19 @@ export class NoAuthGuard implements CanActivate {
     | UrlTree {
     return new Promise((resolve) => {
       this.firebaseSvc.getAuth().onAuthStateChanged((auth) => {
-        if (!auth) resolve(true);
-        else {
-          this.utilsSvc.routerLink('/inicio');
-          resolve(false);
+        if (auth) {
+          this.firebaseSvc
+            .getUserTipoUsuario(auth.uid)
+            .subscribe((tipoUsuario) => {
+              if (tipoUsuario === 'alumno') {
+                resolve(true); // Usuario autenticado y es un alumno, permite el acceso a la página de inicio
+              } else {
+                this.utilsSvc.routerLink('/profesor'); // Usuario autenticado pero no es un alumno, redirige a la página de profesor
+                resolve(false);
+              }
+            });
+        } else {
+          resolve(true); // No autenticado, permite el acceso a la página de inicio
         }
       });
     });

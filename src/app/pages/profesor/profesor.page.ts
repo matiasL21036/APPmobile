@@ -23,7 +23,8 @@ export class ProfesorPage implements OnInit {
 
   // Obtener Asignaturas
   getMateria() {
-    let path = `users/${this.user().uid}/Asignatura`;
+    let path = `users/${this.user().uid}/
+    Asignatura`;
 
     let sub = this.firebaseSvc.getCollectionData(path).subscribe({
       next: (res: any) => {
