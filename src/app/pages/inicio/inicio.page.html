@@ -5,7 +5,7 @@
     </ion-title>
     <!-- Agrega un botón en la esquina superior derecha para cerrar sesión -->
     <ion-buttons slot="end">
-      <ion-button routerLink="/home" color="dark">
+      <ion-button (click)="signOut()" color="dark">
         <ion-icon name="log-out"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -16,7 +16,7 @@
   <!-- Agrega un ion-card-header para mostrar el nombre de usuario y el mensaje de bienvenida -->
   <ion-card-header>
     <ion-card-title>
-      ¡Bienvenido, {{ username }}!
+      ¡Bienvenido
     </ion-card-title>
     <div class="container text-center">
       <!-- Imagen del profesor (ajusta el ancho y alto según tus necesidades) -->

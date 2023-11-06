@@ -27,30 +27,44 @@ export class AuthPage implements OnInit {
       const loading = await this.utilsSvc.loading();
       await loading.present();
 
-      this.firebaseSvc.signIn(this.form.value as User).then(authResult => {
-        // Obtén el tipo de usuario desde Firebase
-        this.firebaseSvc.getUserTipoUsuario(authResult.user.uid).subscribe(tipoUsuario => {
-          if (tipoUsuario === 'alumno') {
-            this.router.navigate(['/inicio', { username: authResult.user.email }]);
-          } else if (tipoUsuario === 'profesor') {
-            this.router.navigate(['/profesor', { username: authResult.user.email }]);
-          } else {
-            // Tipo de usuario desconocido
-            console.log('Tipo de usuario desconocido');
-          }
+      this.firebaseSvc
+        .signIn(this.form.value as User)
+        .then((authResult) => {
+          // Obtén el tipo de usuario desde Firebase
+          this.firebaseSvc
+            .getUserTipoUsuario(authResult.user.uid)
+            .subscribe((tipoUsuario) => {
+              if (tipoUsuario === 'alumno') {
+                // Redirige al usuario a la página de inicio para alumnos
+                this.router.navigate([
+                  '/inicio',
+                  { username: authResult.user.displayName },
+                ]);
+              } else if (tipoUsuario === 'profesor') {
+                // Redirige al usuario a la página de inicio para profesores
+                this.router.navigate([
+                  '/profesor',
+                  { username: authResult.user.displayName },
+                ]);
+              } else {
+                // Tipo de usuario desconocido
+                console.log('Tipo de usuario desconocido');
+              }
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          this.utilsSvc.presentToast({
+            message: error.message,
+            duration: 2500,
+            color: 'primary',
+            position: 'middle',
+            icon: 'alert-circle-outline',
+          });
+        })
+        .finally(() => {
+          loading.dismiss();
         });
-      }).catch(error => {
-        console.log(error);
-        this.utilsSvc.presentToast({
-          message: error.message,
-          duration: 2500,
-          color: 'primary',
-          position: 'middle',
-          icon: 'alert-circle-outline'
-        });
-      }).finally(() => {
-        loading.dismiss();
-      });
     }
   }
 

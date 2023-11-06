@@ -1,36 +1,64 @@
 import { Injectable, inject } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from 'firebase/auth';
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  sendPasswordResetEmail,
+} from 'firebase/auth';
 import { User } from '../models/user.model';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { getFirestore, setDoc, doc, DocumentSnapshot, getDoc } from 'firebase/firestore';
-import { switchMap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import {
+  getFirestore,
+  setDoc,
+  doc,
+  getDoc,
+  DocumentSnapshot,
+  collectionData,
+  query,
+} from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { UtilsService } from './utils.service';
+import { collection } from 'firebase/firestore';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FirebaseService {
-
   auth = inject(AngularFireAuth);
   firestore = inject(AngularFirestore);
+  utilSvc = inject(UtilsService);
 
-  // autenticar 
+  // Autenticar \\
+
+  getAuth() {
+    return getAuth();
+  }
+
+  // Iniciar sesión
   signIn(user: User) {
     return signInWithEmailAndPassword(getAuth(), user.email, user.password);
   }
 
-  // crear usuario
+  // Cerrar Sesión
+  signOut() {
+    getAuth().signOut();
+    localStorage.removeItem('user');
+    this.utilSvc.routerLink('/auth');
+  }
+
+  // Registrarse
   signUp(user: User) {
     return createUserWithEmailAndPassword(getAuth(), user.email, user.password);
   }
 
-  // actualizar usuario
+  // Actualizar perfil de usuario
   updateUser(displayName: string) {
     return updateProfile(getAuth().currentUser, { displayName });
   }
 
-  // Enviar email para recuperar contraseña
+  // Enviar correo electrónico para restablecer contraseña
   sendRecoveryEmail(email: string) {
     return sendPasswordResetEmail(getAuth(), email);
   }
@@ -55,8 +83,16 @@ export class FirebaseService {
     });
   }
 
-  // Base de datos
+  // Base de datos \\
+
+  // Setear un Documento
   setDocument(path: string, data: any) {
     return setDoc(doc(getFirestore(), path), data);
+  }
+
+  // Mostrar Asignaturas
+  getCollectionData(path: string, collectionQuery?: any) {
+    const ref = collection(getFirestore(), path);
+    return collectionData(query(ref, collectionQuery));
   }
 }
