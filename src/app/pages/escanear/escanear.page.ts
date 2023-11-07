@@ -22,6 +22,6 @@ export class EscanearPage implements OnInit {
     localStorage.setItem('mensaje', mensaje);
 
     // Puedes mostrar una alerta o realizar otra acción después de guardar los datos
-    alert('Imagen mostrada y mensaje guardado en localStorage.');
+    //alert('Imagen mostrada y mensaje guardado en localStorage.');
   }
 }
