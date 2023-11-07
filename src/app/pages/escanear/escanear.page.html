@@ -1,1 +1,8 @@
-<ion-img src="assets/QR.jpeg"></ion-img>
+<ion-content>
+    <!-- Imagen que se mostrará -->
+    <ion-img [src]="'assets/QR.jpeg'" id="imageToDisplay"></ion-img>
+    
+    <!-- Botón para mostrar la imagen y almacenar datos -->
+    <ion-button (click)="mostrarImagenYGuardarMensaje()">Guardar Mensaje</ion-button>
+  </ion-content>
+  

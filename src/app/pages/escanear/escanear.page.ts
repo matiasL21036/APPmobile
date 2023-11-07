@@ -12,4 +12,16 @@ export class EscanearPage implements OnInit {
   ngOnInit() {
   }
 
+  mostrarImagenYGuardarMensaje() {
+    // Muestra la imagen
+    const imageToDisplay = document.getElementById('imageToDisplay');
+    imageToDisplay.style.display = 'block';
+    
+    // Almacena el mensaje en el localStorage
+    const mensaje = "Ubicación: Paicavi 3280, Hora del Dispositivo: " + new Date().toLocaleString();
+    localStorage.setItem('mensaje', mensaje);
+
+    // Puedes mostrar una alerta o realizar otra acción después de guardar los datos
+    alert('Imagen mostrada y mensaje guardado en localStorage.');
+  }
 }

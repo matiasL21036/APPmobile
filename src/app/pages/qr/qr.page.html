@@ -7,9 +7,13 @@
     min-height: 100vh;
     /* Establece la altura mínima de la vista de la ventana al 100% del viewport height */
   }
+
+  /* Estilo adicional para ocultar la imagen */
+  .hidden {
+    display: none;
+  }
 </style>
 
-
-<div class="container-fluid center-screen">
-  <ion-img src="assets/querre.png" alt="Imagen de encabezado"></ion-img>
+<div class="container-fluid center-screen" id="imageContainer">
+  <ion-img src="assets/querre.png" alt="Imagen de encabezado" id="imageToDisplay"></ion-img>
 </div>
