@@ -1,1 +1,14 @@
-<ion-img src="assets/QR.jpeg"></ion-img>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Escanear</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Imagen que se mostrará -->
+  <a (click)="mostrarImagenYGuardarMensaje()"><ion-img [src]="'assets/QR.jpeg'" id="imageToDisplay"></ion-img></a>
+
+</ion-content>

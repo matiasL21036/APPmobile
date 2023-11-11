@@ -1,5 +1,13 @@
-import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
-import { AnimationController } from '@ionic/angular';
+// asistencia.page.ts
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ElementRef,
+  ChangeDetectorRef,
+} from '@angular/core';
+import { AnimationController, Animation } from '@ionic/angular';
+import { AsignaturasService } from '../../servicios/asignaturas.service';
 
 @Component({
   selector: 'app-asistencia',
@@ -7,54 +15,44 @@ import { AnimationController } from '@ionic/angular';
   styleUrls: ['./asistencia.page.scss'],
 })
 export class AsistenciaPage implements OnInit, AfterViewInit {
-  asignaturas: { nombre: string; porcentaje: number }[] = [
-    { nombre: 'Calidad De Software', porcentaje: 83.3 },
-    { nombre: 'Programacion De Aplicaciones Moviles', porcentaje: 72.7 },
-    { nombre: 'Proceso De Portafolio 4', porcentaje: 50 },
-    { nombre: 'Ingles Intermedio	', porcentaje: 76.5 },
-    { nombre: 'Estadistica Descriptiva', porcentaje: 72.7 },
-    { nombre: 'Arquitectura', porcentaje: 83.3 },
-    { nombre: 'Etica Para El Trabajo', porcentaje: 100 },
-  ];
+  asignaturas: { nombre: string; porcentaje: number; seccion: string }[] = [];
 
   constructor(
     private animationCtrl: AnimationController,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private asignaturasService: AsignaturasService,
+    private cdRef: ChangeDetectorRef
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    // Suscríbete al servicio para recibir actualizaciones de las asignaturas
+    this.asignaturasService.asignaturas$.subscribe((asignaturas) => {
+      console.log('Asignaturas actualizadas:', asignaturas);
+      this.asignaturas = asignaturas;
+      this.cdRef.detectChanges(); // Forzar la detección de cambios
+      console.log('Suscripción activa en AsistenciaPage');
+    });
+  }
 
   ngAfterViewInit() {
-    for (let i = 0; i < this.asignaturas.length; i++) {
-      const progressBar = this.elementRef.nativeElement.querySelector(
-        '.progress-bar-' + (i + 1)
-      );
-      if (progressBar) {
-        const width = this.asignaturas[i].porcentaje + '%';
-        this.animateProgressBar(progressBar, width);
-        this.updateProgressBarColor(progressBar, this.asignaturas[i].porcentaje);
-      }
-    }
+    // Lógica para animar las barras de progreso
+    this.animateProgressBar();
   }
 
-  animateProgressBar(element: HTMLElement, width: string) {
-    const animation = this.animationCtrl
-      .create()
-      .addElement(element)
-      .duration(1000)
-      .fromTo('width', '0%', width);
+  private animateProgressBar() {
+    // Obtén todas las barras de progreso
+    const progressBars =
+      this.elementRef.nativeElement.querySelectorAll('.progress-bar');
 
-    animation.play();
-  }
+    // Crea una animación para cada barra de progreso
+    progressBars.forEach((progressBar, index) => {
+      const animation: Animation = this.animationCtrl
+        .create()
+        .addElement(progressBar)
+        .duration(1000) // Duración de la animación en milisegundos
+        .fromTo('width', '0%', `${this.asignaturas[index].porcentaje}%`);
 
-  updateProgressBarColor(element: HTMLElement, porcentaje: number) {
-    element.classList.remove('rojo', 'amarillo', 'verde');
-    if (porcentaje < 75) {
-      element.classList.add('rojo');
-    } else if (porcentaje === 75) {
-      element.classList.add('amarillo');
-    } else {
-      element.classList.add('verde');
-    }
+      animation.play();
+    });
   }
 }
