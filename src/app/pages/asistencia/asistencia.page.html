@@ -12,11 +12,11 @@
   <ng-container *ngFor="let asignatura of asignaturas; let i = index">
     <div class="text-center mb-3">
       <h3>{{ asignatura.nombre }}</h3>
-      <!-- Barra de progreso con estilos condicionales -->
-      <div class="progress">
+      <!-- Barra de progreso con estilos condicionales y evento de clic -->
+      <div class="progress" (click)="aumentarPorcentaje(i)">
         <div class="progress-bar progress-bar-{{ i + 1 }}" [ngStyle]="{ 'width.%': asignatura.porcentaje }" [ngClass]="{
                'bg-danger': asignatura.porcentaje <= 50,
-               'bg-warning': asignatura.porcentaje >50 && asignatura.porcentaje <= 75,
+               'bg-warning': asignatura.porcentaje > 50 && asignatura.porcentaje <= 75,
                'bg-success': asignatura.porcentaje > 75
              }">
           {{ asignatura.porcentaje }}%
