@@ -1,27 +1,28 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/ruta-de-regreso"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Portal de Asistencia</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Portal de Asistencia</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- Repite la estructura utilizando *ngFor para cada asignatura -->
-  <ng-container *ngFor="let asignatura of asignaturas; let i = index">
-    <div class="text-center mb-3">
-      <h3>{{ asignatura.nombre }}</h3>
-      <!-- Barra de progreso con estilos condicionales y evento de clic -->
-      <div class="progress" (click)="aumentarPorcentaje(i)">
-        <div class="progress-bar progress-bar-{{ i + 1 }}" [ngStyle]="{ 'width.%': asignatura.porcentaje }" [ngClass]="{
-               'bg-danger': asignatura.porcentaje <= 50,
-               'bg-warning': asignatura.porcentaje > 50 && asignatura.porcentaje <= 75,
-               'bg-success': asignatura.porcentaje > 75
+    <!-- Repite la estructura utilizando *ngFor para cada asignatura -->
+    <ng-container *ngFor="let asignatura of asignaturas; let i = index">
+        <div class="text-center mb-3">
+            <h3>{{ asignatura.nom_asignatura }}</h3>
+            <!-- Barra de progreso con estilos condicionales y evento de clic -->
+            <div class="progress" (click)="(i)">
+                <div class="progress-bar progress-bar-{{ i + 1 }}" [ngStyle]="{ 'width.%': asignatura.asistencia }"
+                    [ngClass]="{
+               'bg-danger': asignatura.asistencia <= 50,
+               'bg-warning': asignatura.asistencia > 50 && asignatura.asistencia <= 75,
+               'bg-success': asignatura.asistencia > 75
              }">
-          {{ asignatura.porcentaje }}%
+                    {{ asignatura.asistencia }}%
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </ng-container>
+    </ng-container>
 </ion-content>
