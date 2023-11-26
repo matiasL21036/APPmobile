@@ -3,5 +3,5 @@ export interface User {
   email: string;
   password: string;
   name: string;
-  tipoUsuario: string; // Agrega el campo tipoUsuario
+  tipoUsuario: string;
 }

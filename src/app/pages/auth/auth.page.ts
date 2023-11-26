@@ -4,6 +4,7 @@ import { User } from 'src/app/models/user.model';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { Router } from '@angular/router';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 @Component({
   selector: 'app-auth',
@@ -22,6 +23,19 @@ export class AuthPage implements OnInit {
     private router: Router
   ) {}
 
+  ngOnInit() {
+    // Escucha los cambios en el estado de autenticación
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // Si hay un usuario autenticado, redirige según el tipo de usuario
+        this.redirectBasedOnUserType(user);
+      } else {
+        // Usuario no autenticado
+      }
+    });
+  }
+
   async submit() {
     if (this.form.valid) {
       const loading = await this.utilsSvc.loading();
@@ -30,27 +44,8 @@ export class AuthPage implements OnInit {
       this.firebaseSvc
         .signIn(this.form.value as User)
         .then((authResult) => {
-          // Obtén el tipo de usuario desde Firebase
-          this.firebaseSvc
-            .getUserTipoUsuario(authResult.user.uid)
-            .subscribe((tipoUsuario) => {
-              if (tipoUsuario === 'alumno') {
-                // Redirige al usuario a la página de inicio para alumnos
-                this.router.navigate([
-                  '/inicio',
-                  { username: authResult.user.displayName },
-                ]);
-              } else if (tipoUsuario === 'profesor') {
-                // Redirige al usuario a la página de inicio para profesores
-                this.router.navigate([
-                  '/profesor',
-                  { username: authResult.user.displayName },
-                ]);
-              } else {
-                // Tipo de usuario desconocido
-                console.log('Tipo de usuario desconocido');
-              }
-            });
+          // Usuario autenticado con éxito, redirige según el tipo de usuario
+          this.redirectBasedOnUserType(authResult.user);
         })
         .catch((error) => {
           console.log(error);
@@ -68,7 +63,19 @@ export class AuthPage implements OnInit {
     }
   }
 
-  ngOnInit() {
-    // Lógica de inicialización si es necesaria
+  private redirectBasedOnUserType(user) {
+    // Obtén el tipo de usuario desde Firebase
+    this.firebaseSvc.getUserTipoUsuario(user.uid).subscribe((tipoUsuario) => {
+      if (tipoUsuario === 'alumno') {
+        // Redirige al usuario a la página de inicio para alumnos
+        this.router.navigate(['/inicio', { username: user.displayName }]);
+      } else if (tipoUsuario === 'profesor') {
+        // Redirige al usuario a la página de inicio para profesores
+        this.router.navigate(['/profesor', { username: user.displayName }]);
+      } else {
+        // Tipo de usuario desconocido
+        console.log('Tipo de usuario desconocido');
+      }
+    });
   }
 }

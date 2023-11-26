@@ -26,19 +26,20 @@ export class AsistenciaPage implements OnInit, AfterViewInit {
   ngOnInit() {}
 
   user(): User {
-    return this.utilsSvc.getFromLocalStorage('user');
+    return this.utilsSvc.getFromLocalStorage('User');
   }
   ionViewWillEnter() {
     this.getAsignaturas();
   }
 
+  uid = JSON.parse(localStorage.getItem('user'))?.uid;
+
   // Obtener Asignaturas
   getAsignaturas() {
+    console.log(this.uid);
     let path = `users/${this.user().uid}/Clases`;
-
     let sub = this.FirebaseSvc.getCollectionData(path).subscribe({
       next: (res: any) => {
-        console.log(res);
         this.asignaturas = res;
         sub.unsubscribe();
       },
