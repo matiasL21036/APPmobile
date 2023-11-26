@@ -1,5 +1,16 @@
-import { Component, OnInit, AfterViewInit, ElementRef, Renderer2 } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ElementRef,
+  Renderer2,
+  inject,
+} from '@angular/core';
 import { AnimationController } from '@ionic/angular';
+import { UtilsService } from '../../services/utils.service';
+import { User } from 'src/app/models/user.model';
+import { FirebaseService } from 'src/app/services/firebase.service';
+import { asignatura } from 'src/app/models/asignaturas.models';
 
 @Component({
   selector: 'app-asistencia',
@@ -7,86 +18,32 @@ import { AnimationController } from '@ionic/angular';
   styleUrls: ['./asistencia.page.scss'],
 })
 export class AsistenciaPage implements OnInit, AfterViewInit {
-  asignaturas: { nombre: string; porcentaje: number }[] = [
-    { nombre: 'Calidad De Software', porcentaje: 83.3 },
-    { nombre: 'Programacion De Aplicaciones Moviles', porcentaje: 72.7 },
-    { nombre: 'Proceso De Portafolio 4', porcentaje: 50 },
-    { nombre: 'Ingles Intermedio', porcentaje: 76.5 },
-    { nombre: 'Estadistica Descriptiva', porcentaje: 72.7 },
-    { nombre: 'Arquitectura', porcentaje: 83.3 },
-    { nombre: 'Etica Para El Trabajo', porcentaje: 100 },
-  ];
+  utilsSvc = inject(UtilsService);
+  FirebaseSvc = inject(FirebaseService);
 
-  constructor(
-    private animationCtrl: AnimationController,
-    private elementRef: ElementRef,
-    private renderer: Renderer2
-  ) {}
+  asignaturas: asignatura[] = [];
 
   ngOnInit() {}
 
-  ngAfterViewInit() {
-    for (let i = 0; i < this.asignaturas.length; i++) {
-      const progressBar = this.elementRef.nativeElement.querySelector(
-        '.progress-bar-' + (i + 1)
-      );
-      if (progressBar) {
-        const width = this.asignaturas[i].porcentaje + '%';
-        this.animateProgressBar(progressBar, width);
-        this.updateProgressBarColor(progressBar, this.asignaturas[i].porcentaje);
-      }
-    }
+  user(): User {
+    return this.utilsSvc.getFromLocalStorage('user');
+  }
+  ionViewWillEnter() {
+    this.getAsignaturas();
   }
 
-  animateProgressBar(element: HTMLElement, width: string) {
-    const animation = this.animationCtrl
-      .create()
-      .addElement(element)
-      .duration(1000)
-      .fromTo('width', '0%', width);
+  // Obtener Asignaturas
+  getAsignaturas() {
+    let path = `users/${this.user().uid}/Clases`;
 
-    animation.play();
+    let sub = this.FirebaseSvc.getCollectionData(path).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        this.asignaturas = res;
+        sub.unsubscribe();
+      },
+    });
   }
 
-  updateProgressBarColor(element: HTMLElement, porcentaje: number) {
-    this.renderer.removeClass(element, 'rojo');
-    this.renderer.removeClass(element, 'amarillo');
-    this.renderer.removeClass(element, 'verde');
-  
-    if (porcentaje < 75) {
-      this.renderer.addClass(element, 'rojo');
-    } else if (porcentaje === 75) {
-      this.renderer.addClass(element, 'amarillo');
-    } else {
-      this.renderer.addClass(element, 'verde');
-    }
-  }
-  
-
-  aumentarPorcentaje(index: number) {
-    if (index >= 0 && index < this.asignaturas.length) {
-      this.asignaturas[index].porcentaje += 5;
-
-      const progressBar = this.elementRef.nativeElement.querySelector(
-        '.progress-bar-' + (index + 1)
-      );
-      if (progressBar) {
-        const width = this.asignaturas[index].porcentaje + '%';
-        this.animateProgressBar(progressBar, width);
-        this.updateProgressBarColor(progressBar, this.asignaturas[index].porcentaje);
-      }
-
-      this.mostrarImagenYGuardarMensaje();
-    }
-  }
-
-  mostrarImagenYGuardarMensaje() {
-    const imageToDisplay = this.elementRef.nativeElement.querySelector('#imageToDisplay');
-    if (imageToDisplay) {
-      this.renderer.setStyle(imageToDisplay, 'display', 'block');
-    }
-
-    const mensaje = "Ubicación: Paicavi 3280, Hora del Dispositivo: " + new Date().toLocaleString();
-    localStorage.setItem('mensaje', mensaje);
-  }
+  ngAfterViewInit() {}
 }
