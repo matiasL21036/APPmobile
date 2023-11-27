@@ -1,44 +1,52 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { AlertController } from '@ionic/angular';
-import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
+import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { User } from 'firebase/auth';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { asignatura } from 'src/app/models/asignaturas.models';
-import { AddUpdateAssistComponent } from 'src/app/shared/components/add-update-assist/add-update-assist.component';
+import { ActivatedRoute, Router } from '@angular/router';
+
 @Component({
   selector: 'app-escanear',
   templateUrl: './escanear.page.html',
   styleUrls: ['./escanear.page.scss'],
 })
 export class EscanearPage implements OnInit {
-  isSupported = false;
   clase: any;
+  user: User; // Datos para generar el código QR
 
-  constructor(private alertController: AlertController) {}
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private alertController: AlertController
+  ) {
+    const { uid } = JSON.parse(localStorage.getItem('user'));
+    this.user = uid;
+  }
+  firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService);
-  FirebaseSvc = inject(FirebaseService);
-
-  asignaturas: asignatura[] = [];
-
+  isSupported = false;
+  barcodes: any;
+  data: any;
   ngOnInit() {
+    this.activatedRoute.paramMap.subscribe((params) => {
+      const claseParam = params.get('clase');
+      if (claseParam) {
+        this.clase = JSON.parse(claseParam);
+        console.log(this.clase);
+      }
+    });
     BarcodeScanner.isSupported().then((result) => {
       this.isSupported = result.supported;
     });
   }
 
-  user(): User {
-    console.log(this.utilsSvc.getFromLocalStorage('User'));
-    return this.utilsSvc.getFromLocalStorage('User');
-  }
-
-  uid = JSON.parse(localStorage.getItem('user'))?.uid;
-
   limpiarYParsearJSON(cadenaConEscape: string): any {
     // Eliminar los caracteres de escape y espacios innecesarios
     const cadenaLimpia = cadenaConEscape
-      .replace(/\n/g, '')
-      .replace(/\"/g, '"')
+      .replace(/\\n/g, '')
+      .replace(/\\"/g, '"')
       .trim();
 
     // Parsear la cadena limpia a un objeto JSON
@@ -46,16 +54,20 @@ export class EscanearPage implements OnInit {
     return objetoJSON;
   }
 
+  uid = JSON.parse(localStorage.getItem('user'))?.uid;
+
   async scan(): Promise<void> {
     const granted = await this.requestPermissions();
     if (!granted) {
       this.presentAlert();
       return;
     }
-
     const { barcodes } = await BarcodeScanner.scan();
-    this.clase = this.limpiarYParsearJSON(barcodes[0].rawValue);
-    this.envioDatos(this.clase);
+    console.log(barcodes[0].rawValue);
+    this.barcodes = this.limpiarYParsearJSON(barcodes[0].rawValue);
+    console.log('Barcode data', this.barcodes);
+
+    this.envioDatos(this.barcodes);
   }
 
   async requestPermissions(): Promise<boolean> {
@@ -73,10 +85,10 @@ export class EscanearPage implements OnInit {
   }
 
   envioDatos(data) {
-    console.log(this.uid);
-    let path = `users/` + this.uid + `/Clases`;
-    this.FirebaseSvc.addAsistencia(path, data).then((res) => {
-      console.log('Se guardó con éxito');
+    console.log(this.user);
+    let path = 'users/' + this.user + '/Clases';
+    this.firebaseSvc.addAsistencia(path, data).then((res) => {
+      console.log('Se guardó correctamente');
     });
   }
 }

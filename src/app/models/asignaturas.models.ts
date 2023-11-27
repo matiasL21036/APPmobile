@@ -1,8 +1,10 @@
 export interface asignatura {
-  id: string;
-  nom_asignatura: string;
+  alumnos: number;
+  asignatura: string;
+  fecha: string;
+  horaGuardada: string;
+  horafin: string;
   horainicio: string;
-  horatermino: string;
-  seccion: string;
-  asistencia: number;
+  profesor: string;
+  ubicacion: string;
 }

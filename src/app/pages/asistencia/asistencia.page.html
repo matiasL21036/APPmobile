@@ -7,22 +7,22 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-    <!-- Repite la estructura utilizando *ngFor para cada asignatura -->
-    <ng-container *ngFor="let asignatura of asignaturas; let i = index">
-        <div class="text-center mb-3">
-            <h3>{{ asignatura.nom_asignatura }}</h3>
-            <!-- Barra de progreso con estilos condicionales y evento de clic -->
-            <div class="progress" (click)="(i)">
-                <div class="progress-bar progress-bar-{{ i + 1 }}" [ngStyle]="{ 'width.%': asignatura.asistencia }"
-                    [ngClass]="{
-               'bg-danger': asignatura.asistencia <= 50,
-               'bg-warning': asignatura.asistencia > 50 && asignatura.asistencia <= 75,
-               'bg-success': asignatura.asistencia > 75
-             }">
-                    {{ asignatura.asistencia }}%
-                </div>
-            </div>
-        </div>
-    </ng-container>
+<ion-content>
+    <ion-accordion-group color="dark">
+        <ng-container color="dark" *ngFor="let asignatura of asignaturasUnicas">
+            <ion-accordion style="background-color: white" [value]="asignatura" color="light">
+                <ion-item style="background-color: white" slot="header" color="light">
+                    <ion-label>{{ asignatura }}</ion-label>
+                </ion-item>
+                <ion-list slot="content">
+                    <ion-item *ngFor="let item of gruposPorAsignatura[asignatura]">
+                        <ion-label>
+                            <p>Fecha: {{ item.fecha }}</p>
+                            <!-- Agrega más campos según tus necesidades -->
+                        </ion-label>
+                    </ion-item>
+                </ion-list>
+            </ion-accordion>
+        </ng-container>
+    </ion-accordion-group>
 </ion-content>
