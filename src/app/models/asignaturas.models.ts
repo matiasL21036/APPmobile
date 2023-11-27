@@ -4,6 +4,5 @@ export interface asignatura {
   horainicio: string;
   horatermino: string;
   seccion: string;
-  Presente: boolean;
   asistencia: number;
 }

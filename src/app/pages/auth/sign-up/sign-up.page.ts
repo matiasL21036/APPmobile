@@ -30,29 +30,30 @@ export class SignUpPage implements OnInit {
     if (this.form.valid) {
       const loading = await this.utilsSvc.loading();
       await loading.present();
-      
-      this.firebaseSvc.signUp(this.form.value as User).then(async res => {
-        await this.firebaseSvc.updateUser(this.form.value.name);
 
-        let uid = res.user.uid;
-        this.form.controls.uid.setValue(uid);
+      this.firebaseSvc
+        .signUp(this.form.value as User)
+        .then(async (res) => {
+          await this.firebaseSvc.updateUser(this.form.value.name);
 
-        this.setUserInfo(uid);
+          let uid = res.user.uid;
+          this.form.controls.uid.setValue(uid);
 
-
-        
-      }).catch(error => {
-        console.log(error);
-        this.utilsSvc.presentToast({
-          message: error.message,
-          duration: 2500,
-          color: 'primary',
-          position: 'middle',
-          icon: 'alert-circle-outline',
+          this.setUserInfo(uid);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.utilsSvc.presentToast({
+            message: error.message,
+            duration: 2500,
+            color: 'primary',
+            position: 'middle',
+            icon: 'alert-circle-outline',
+          });
+        })
+        .finally(() => {
+          loading.dismiss();
         });
-      }).finally(() => {
-        loading.dismiss();
-      });
     }
   }
 
@@ -64,29 +65,26 @@ export class SignUpPage implements OnInit {
       let path = `users/${uid}`;
       delete this.form.value.password;
 
-      this.firebaseSvc.setDocument(path,this.form.value).then(async res => {
-
-        this.utilsSvc.saveInLocalStorage('user',this.form.value);
-        this.utilsSvc.routerLink('/inicio');
-        this.form.reset();
-
-
-        
-        console.log(res);
-      }).catch(error => {
-        console.log(error);
-        this.utilsSvc.presentToast({
-          message: error.message,
-          duration: 2500,
-          color: 'primary',
-          position: 'middle',
-          icon: 'alert-circle-outline',
+      this.firebaseSvc
+        .setDocument(path, this.form.value)
+        .then(async (res) => {
+          this.utilsSvc.saveInLocalStorage('user', this.form.value);
+          this.utilsSvc.routerLink('/inicio');
+          this.form.reset();
+        })
+        .catch((error) => {
+          console.log(error);
+          this.utilsSvc.presentToast({
+            message: error.message,
+            duration: 2500,
+            color: 'primary',
+            position: 'middle',
+            icon: 'alert-circle-outline',
+          });
+        })
+        .finally(() => {
+          loading.dismiss();
         });
-      }).finally(() => {
-        loading.dismiss();
-      });
     }
   }
-
-
 }

@@ -20,7 +20,9 @@ import {
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { UtilsService } from './utils.service';
-import { collection } from 'firebase/firestore';
+import { addDoc, collection, updateDoc } from 'firebase/firestore';
+import { AddUpdateAssistComponent } from '../shared/components/add-update-assist/add-update-assist.component';
+import { asignatura } from '../models/asignaturas.models';
 
 @Injectable({
   providedIn: 'root',
@@ -90,9 +92,29 @@ export class FirebaseService {
     return setDoc(doc(getFirestore(), path), data);
   }
 
+  // Obtener un documento
+  async getDocument(path: string) {
+    return (await getDoc(doc(getFirestore(), path))).data();
+  }
+
+  // asistencia
+  addAsistencia(path: string, data: any) {
+    return addDoc(collection(getFirestore(), path), data);
+  }
+
+  // Actualizar un Documento
+  updateDocument(path: string, data: any) {
+    return updateDoc(doc(getFirestore(), path), data);
+  }
+
   // Mostrar Asignaturas
   getCollectionData(path: string, collectionQuery?: any) {
     const ref = collection(getFirestore(), path);
     return collectionData(query(ref, collectionQuery), { idField: 'id' });
+  }
+  // x
+  getAsistencia(path: string, collectionQuery?: any) {
+    const ref = collection(getFirestore(), path);
+    return collectionData(ref, collectionQuery);
   }
 }
